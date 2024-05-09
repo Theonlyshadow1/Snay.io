@@ -1,1 +1,64 @@
-console.log("Stupid baka trying to use my script")
+function initializeButton() {
+  const body = document.body;
+  const button = document.createElement('button');
+  button.id = 'rainbowButton';
+  button.innerText = 'Please be patient, the script is under maintenance';
+  body.appendChild(button);
+
+  // Apply styles and position
+  addStyles();
+
+  // Start rainbow effect if not in maintenance
+  if (!checkMaintenance()) {
+    startRainbowEffect(button);
+    button.innerText = 'Rainbow Button';
+  }
+}
+
+// Function to dynamically add CSS
+function addStyles() {
+  const style = document.createElement('style');
+  style.innerHTML = `
+    #rainbowButton {
+      position: fixed; /* Fixed positioning */
+      top: 0; /* Top of the screen */
+      left: 50%; /* Center horizontally */
+      transform: translateX(-50%); /* Adjust for centering */
+      padding: 10px 20px;
+      font-size: 16px;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: black; /* Default background */
+      transition: background-color 2s;
+      z-index: 1000; /* Ensure it's on top */
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Soft shadow for better visibility */
+      text-shadow: 0 1px 1px rgba(0,0,0,0.2); /* Make text more readable */
+    }
+    @keyframes rainbow {
+      0% { background-color: red; }
+      17% { background-color: orange; }
+      34% { background-color: yellow; }
+      51% { background-color: green; }
+      68% { background-color: blue; }
+      85% { background-color: indigo; }
+      100% { background-color: violet; }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+// Function to start the rainbow effect
+function startRainbowEffect(button) {
+  button.style.animation = 'rainbow 2s infinite linear';
+}
+
+// Function to check maintenance status
+function checkMaintenance() {
+  // Placeholder for actual maintenance check logic
+  return true; // Assume it's always under maintenance for this example
+}
+
+// Initialize button on script load
+initializeButton();
