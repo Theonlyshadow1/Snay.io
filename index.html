@@ -1,57 +1,42 @@
-function createModBtn(id, defaultState, localStorageKey, buttonName) {
-    const button = document.createElement("button");
-    button.id = id;
-    button.textContent = buttonName;
-    button.classList.add(defaultState === "on" ? "on" : "off");
-    updateButtonColor(button);  // Set initial color based on the default state
+function createVisibleTextButton() {
+  const body = document.body;
+  const button = document.createElement('button');
+  button.id = 'rainbowButton';
+  button.innerText = 'Please be patient, the script is under maintenance  -Shadow';
+  button.style.position = 'fixed';
+  button.style.top = '10px';
+  button.style.left = '50%';
+  button.style.transform = 'translateX(-50%)';
+  button.style.padding = '8px 16px';
+  button.style.zIndex = '1000';
+  button.style.backgroundColor = 'rgba(255, 255, 255, 0.7)'; // Transparency
+  button.style.color = 'black'; // Change text color to black for better contrast
+  button.style.fontSize = '14px'; // Ensure font size is large enough
+  button.style.fontWeight = 'bold'; // Make the font bold
+  button.style.textShadow = '0px 0px 8px rgba(255,255,255,0.9)'; // Enhancing text shadow for better visibility
+  button.style.animation = 'rainbow 2s infinite linear'; // Rainbow animation
+  body.appendChild(button);
 
-    button.onclick = function() {
-        this.classList.toggle("on");
-        this.classList.toggle("off");
-        localStorage.setItem(localStorageKey, this.classList.contains("on") ? "true" : "false");
-        updateButtonColor(this);  // Update color based on current state
-        console.log(`${buttonName} ${this.classList.contains("on") ? "enabled" : "disabled"}.`);
-    };
-
-    button.style.position = 'fixed';
-    button.style.top = (id === "respawnButton" ? '10px' : '50px');  // Different positions to avoid overlap
-    button.style.right = '10px';
-    button.style.zIndex = '1000';
-    document.body.appendChild(button);
-    return button;
+  const style = document.createElement('style');
+  style.innerHTML = `
+    @keyframes rainbow {
+      0%, 100% { background-color: rgba(255, 0, 0, 0.7); }
+      16% { background-color: rgba(255, 165, 0, 0.7); }
+      32% { background-color: rgba(255, 255, 0, 0.7); }
+      48% { background-color: rgba(0, 128, 0, 0.7); }
+      64% { background-color: rgba(0, 0, 255, 0.7); }
+      80% { background-color: rgba(75, 0, 130, 0.7); }
+    }
+  `;
+  document.head.appendChild(style);
 }
 
-function updateButtonColor(button) {
-    if (button.classList.contains("on")) {
-        button.style.backgroundColor = 'green';
-    } else {
-        button.style.backgroundColor = 'grey';
-    }
+// Ensure the script initializes once the document is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', createVisibleTextButton);
+} else {
+  createVisibleTextButton(); // This function call is for the case where the script loads after the DOM is already ready
 }
-
-
-const respawnButton = createModBtn("respawnButton", "on", "respawnBtnOff", "Automatic Respawn");
-
-
-const autoPreButton = createModBtn("autoPreButton", "off", "autoPreBtnOff", "AutoPre");
-
-const gameover = document.querySelector("#game-over");
-setInterval(() => {
-    if (document.querySelector("button#respawnButton.on")) {
-        if (document.querySelector("#game-over")) {
-            document.querySelector("#game-over").remove();
-        }
-        if (stats.mycells == 0) {
-            play();
-        }
-    } else {
-        if (!document.querySelector("#game-over")) {
-            if (gameover) {
-                document.querySelector("#root").append(gameover);
-            }
-        }
-    }
-}, 400);
 
 function sendNotification(Data) {
     var extras = localStorage.getItem('extras');
